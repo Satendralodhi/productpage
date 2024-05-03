@@ -45,9 +45,7 @@ const Product_Model=connection.define('Product_table',{
         },
       },
    
-      videos: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-      },
+      
       attributes: {
         type: DataTypes.JSONB,
       },
