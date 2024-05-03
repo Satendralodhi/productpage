@@ -3,6 +3,24 @@ const app=express()
 const dotenv=require('dotenv').config()
 const connection=require('./database/config')
 const Product_Model=require('./model/model')
+const ProductRoute = require('./Routes/Product.route')
+
+
+
+
+
+
+
+
+
+
+
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+
+
+app.use('/api/products',ProductRoute)
+
 //error handller
 app.use((err,req,res,next)=>{
     res.status(err.status||500)

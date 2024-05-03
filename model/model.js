@@ -1,12 +1,7 @@
 const {Sequelize,DataTypes}=require('sequelize')
 const connection=require('../database/config')
 const Product_Model=connection.define('Product_table',{
-    // id:{
-    //     type:DataTypes.INTEGER,
-    //     primaryKey:true,
-    //     autoIncrement:true,
-    // },
-    id: {
+    productId: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,//doubt
         primaryKey: true,
@@ -49,9 +44,7 @@ const Product_Model=connection.define('Product_table',{
           isIn: [['male', 'female', 'unisex']],
         },
       },
-      images: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-      },
+   
       videos: {
         type: DataTypes.ARRAY(DataTypes.STRING),
       },
@@ -78,14 +71,7 @@ const Product_Model=connection.define('Product_table',{
         defaultValue: 0,
       },
       tags: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-      },
-    
-      discounts: {
-        type: DataTypes.JSONB,
-      },
-      shipping: {
-        type: DataTypes.JSONB,
+        type: DataTypes.ARRAY(DataTypes.STRING)
       },
       inventoryManagement: {
         type: DataTypes.JSONB,
@@ -100,9 +86,7 @@ const Product_Model=connection.define('Product_table',{
       customizationOptions: {
         type: DataTypes.ARRAY(DataTypes.STRING),
       },
-      seo: {
-        type: DataTypes.JSONB,//doubt
-      },
+    
 
     createdAt: {
         type: DataTypes.DATE,
@@ -112,40 +96,63 @@ const Product_Model=connection.define('Product_table',{
         type: DataTypes.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
+},{timestamps:false,
+  freezeTableName: true,
 })
-// const SEO = connection.define('SEO', {
-//   metaTitle: {
-//     type: DataTypes.STRING
-//   },
-//   metaDescription: {
-//     type: DataTypes.STRING
-//   },
-//   metaKeywords: {
-//     type: DataTypes.ARRAY(DataTypes.STRING)
-//   }
-// });
-// const Discount = connection.define('Discount', {
-//   type: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//     validate: {
-//       isIn: [['percentage', 'fixed']]
-//     }
-//   },
-//   value: {
-//     type: DataTypes.NUMBER,
-//     allowNull: false
-//   }
-// });
-
-const ratings=connection.define('ratings',{
-  userId: {
-    type: Sequelize.UUID, // assuming userId is of type INTEGER
-    references: {
-      model: Product_Model,//doubt
-      key: 'id'
+const SEO = connection.define('SEO', {
+  seoId: {
+    type: DataTypes.INTEGER,
+    
+    primaryKey: true,
+    autoIncrement:true,
+  },
+  metaTitle: {
+    type: DataTypes.STRING
+  },
+  metaDescription: {
+    type: DataTypes.STRING
+  },
+  metaKeywords: {
+    type: DataTypes.ARRAY(DataTypes.STRING)
+  }
+},{timestamps:false,
+  freezeTableName: true,
+});
+const Discount = connection.define('Discount', {
+  DiscountId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    allowNull: false,
+  },
+  productId: {
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4,//doubt
+ 
+    allowNull: false,
+  },
+type:{
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isIn: [['percentage', 'fixed']]
     }
   },
+  value:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+},{timestamps:false,
+  freezeTableName: true,
+});
+
+const ratings=connection.define('ratings',{
+  ratingsId: {
+    type: DataTypes.INTEGER,
+    
+    primaryKey: true,
+    autoIncrement:true,
+  },
+  
   rating: {
     type: Sequelize.INTEGER,
     validate: {
@@ -157,29 +164,106 @@ const ratings=connection.define('ratings',{
     type: Sequelize.STRING
   },
 
+},{timestamps:false,
+  freezeTableName: true,
 });
 
-// const Shipping = connection.define('shipping', {
-//   weight: {
-//     type: DataTypes.FLOAT
-//   },
+const Shipping = connection.define('shipping', {
+  ShippingId:  {
+    type: DataTypes.INTEGER,
+    
+    primaryKey: true,
+    autoIncrement:true,
+  },
 
-// });
-// const Dimension = connection.define('Dimension', {
-//   length: {
-//     type: DataTypes.INTEGER
-//   },
-//   width: {
-//     type: DataTypes.INTEGER
-//   },
-//   height: {
-//     type: DataTypes.INTEGER
-//   }
-// });
+  weight: {
+    type: DataTypes.FLOAT
+  },
+  restriction: {
+    type: Sequelize.STRING
+  },
 
-// Shipping.belongsTo(Dimension);
-// Product_Model.hasMany(Discount);
-// Product_Model.belongsTo(SEO);
-// Product_Model.hasMany(Shipping);
-Product_Model.hasMany(ratings);
+},{timestamps:false,
+  freezeTableName: true,
+});
+const Dimension = connection.define('Dimension', {
+  DimensionId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement:true,
+  },
+  length: {
+    type: DataTypes.INTEGER
+  },
+  width: {
+    type: DataTypes.INTEGER
+  },
+  height: {
+    type: DataTypes.INTEGER
+  }
+},{timestamps:false,
+  freezeTableName: true,
+});
+
+
+const image= connection.define('image', {
+  imageId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement:true,
+  },
+  images: {
+    type: DataTypes.INTEGER
+  },
+
+},{timestamps:false,
+  freezeTableName: true,
+});
+const video= connection.define('video', {
+  imageId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement:true,
+  },
+  videos: {
+    type: DataTypes.INTEGER
+  },
+
+},{timestamps:false,
+  freezeTableName: true,
+});
+//relation between productmodel and image model
+Product_Model.hasMany(video, {
+  foreignKey: 'productId',
+});
+video.belongsTo(Product_Model);
+//relation between productmodel and image model
+Product_Model.hasMany(image, {
+  foreignKey: 'productId',
+});
+image.belongsTo(Product_Model);
+//relation between productmodel and ratings model
+Product_Model.hasMany(ratings, {
+  foreignKey: 'productId',
+});
+ratings.belongsTo(Product_Model);
+// relation between productmodel and discount model
+Product_Model.hasMany(Discount, {
+  foreignKey: 'productId',
+});
+Discount.belongsTo(Product_Model);
+//relation between productmodel and shiping model
+Product_Model.belongsTo(Shipping, {
+  foreignKey: 'productId',
+});
+Shipping.belongsTo(Product_Model);
+Product_Model.belongsTo(Dimension, {
+  foreignKey: 'productId',
+});
+Dimension.belongsTo(Product_Model);
+
+Product_Model.belongsTo(SEO, {
+  foreignKey: 'productId',
+});
+SEO.belongsTo(Product_Model);
 module.exports=Product_Model;
