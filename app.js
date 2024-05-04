@@ -2,17 +2,8 @@ const express=require('express')
 const app=express()
 const dotenv=require('dotenv').config()
 const connection=require('./database/config')
-const Product_Model=require('./model/model')
+// const Product_Model=require('./model/Productmodel')
 const ProductRoute = require('./Routes/Product.route')
-
-
-
-
-
-
-
-
-
 
 
 app.use(express.json())
