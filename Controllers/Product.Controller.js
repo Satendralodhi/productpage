@@ -7,12 +7,27 @@ const Discount_Model = require("../model/DiscountModel");
 const Shipping_Model = require("../model/ShipingModel");
 const video_Model = require("../model/VideoModel");
 const Image_Model = require("../model/ImageModel");
-const connection = require("../database/config");
-const createError = require("http-errors");
+const userWishlistModel = require("../model/userWishlistModel");
 const Product_Model = require("../model/Productmodel");
 const { Model, Sequelize } = require("sequelize");
+const connection = require("../database/config");
+const createError = require("http-errors");
 
 module.exports = {
+  createuserWishlistModel: async (req, res, next) => {
+    const productId = req.params.productId;
+    try {
+      const { wishlist } = req.body;
+      const result = await userWishlistModel.create({
+        ProductTableProductId: productId,
+        wishlist: wishlist,
+      });
+      res.send(result);
+    } catch (error) {
+      console.log(error.message);
+    }
+  },
+
   // get all product detail
 
   getProductsbyId: async (req, res, next) => {

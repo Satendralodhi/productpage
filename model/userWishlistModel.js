@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const connection = require("../database/config");
 const Product_Model = require("./Productmodel");
-const Dimension_Model = connection.define(
-  "Dimension",
+const userWishlistModel = connection.define(
+  "userWishlist",
   {
     ProductTableProductId: {
       type: DataTypes.UUID,
@@ -13,14 +13,8 @@ const Dimension_Model = connection.define(
       },
     },
 
-    length: {
-      type: DataTypes.INTEGER,
-    },
-    width: {
-      type: DataTypes.INTEGER,
-    },
-    height: {
-      type: DataTypes.INTEGER,
+    wishlist: {
+      type: DataTypes.ARRAY(DataTypes.UUID),
     },
   },
   { timestamps: false, freezeTableName: true }
@@ -28,9 +22,9 @@ const Dimension_Model = connection.define(
 
 //relation between productmodel and dimention model
 
-Product_Model.belongsTo(Dimension_Model, {
+Product_Model.belongsTo(userWishlistModel, {
   foreignKey: "productId",
 });
-Dimension_Model.belongsTo(Product_Model);
+userWishlistModel.belongsTo(Product_Model);
 
-module.exports = Dimension_Model;
+module.exports = userWishlistModel;
