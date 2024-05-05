@@ -2,11 +2,14 @@ const {Sequelize,DataTypes}=require('sequelize')
 const connection=require('../database/config')
 const Product_Model=require('./Productmodel')
 const SEO_Model= connection.define('SEO', {
-  seoId: {
-    type: DataTypes.INTEGER,
-    
+  ProductTableProductId: {
+    type: DataTypes.UUID,
+    references:{
+model:Product_Model,
+key:'ProductId'
+    },
     primaryKey: true,
-    autoIncrement:true,
+    allowNull: false,
   },
   metaTitle: {
     type: DataTypes.STRING

@@ -4,13 +4,14 @@ const Product_Model=require('./Productmodel')
 
 
 const Image_Model= connection.define('image', {
-  imageId: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement:true,
-  },
+  ProductTableProductId: {
+    type: DataTypes.UUID,
+    references:{
+model:Product_Model,
+key:'ProductId'
+    }},
   images: {
-    type: DataTypes.INTEGER
+    type: DataTypes.STRING
   },
 
 },{timestamps:false,

@@ -3,12 +3,14 @@ const connection=require('../database/config')
 const Product_Model=require('./Productmodel')
 
 const Shipping_Model = connection.define('shipping', {
-  ShippingId:  {
-    type: DataTypes.INTEGER,
-    
-    primaryKey: true,
-    autoIncrement:true,
-  },
+  ProductTableProductId: {
+    type: DataTypes.UUID,
+    primaryKey:true,
+    references:{
+model:Product_Model,
+key:'ProductId'
+    }},
+ 
 
   weight: {
     type: DataTypes.FLOAT

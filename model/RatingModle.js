@@ -2,6 +2,19 @@ const {Sequelize,DataTypes}=require('sequelize')
 const connection=require('../database/config')
 const Product_Model=require('./Productmodel')
 const Ratings_Model=connection.define('ratings',{
+ userId: {
+    type: DataTypes.UUID,
+//     references:{
+// model:User,
+// key:'userId'
+//     }
+},
+  ProductTableProductId: {
+    type: DataTypes.UUID,
+    references:{
+model:Product_Model,
+key:'ProductId'
+    }},
   ratingsId: {
     type: DataTypes.INTEGER,
     

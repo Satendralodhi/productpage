@@ -2,17 +2,13 @@ const {Sequelize,DataTypes}=require('sequelize')
 const connection=require('../database/config')
 const Product_Model=require('./Productmodel')
 const Discount_Model = connection.define('Discount', {
-  DiscountId: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    allowNull: false,
-  },
-  productId: {
+ 
+  ProductTableProductId: {
     type: DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,//doubt
-    
-    allowNull: false,
-  },
+    references:{
+model:Product_Model,
+key:'ProductId'
+    }},
 type:{
     type: DataTypes.STRING,
     allowNull: false,

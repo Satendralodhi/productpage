@@ -2,13 +2,15 @@ const {Sequelize,DataTypes}=require('sequelize')
 const connection=require('../database/config')
 const Product_Model=require('./Productmodel')
 const video_Model= connection.define('video', {
-  videoId: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement:true,
-  },
+  ProductTableProductId: {
+    type: DataTypes.UUID,
+    
+    references:{
+model:Product_Model,
+key:'ProductId'
+    }},
   videos: {
-    type: DataTypes.INTEGER
+    type: DataTypes.STRING
   },
 
 },{timestamps:false,
