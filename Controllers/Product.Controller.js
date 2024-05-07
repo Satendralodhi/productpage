@@ -9,7 +9,7 @@ const video_Model = require("../model/VideoModel");
 const Image_Model = require("../model/ImageModel");
 const userWishlistModel = require("../model/userWishlistModel");
 
-const { Model, Sequelize } = require("sequelize");
+const { Sequelize } = require("sequelize");
 const connection = require("../database/config");
 const createError = require("http-errors");
 
