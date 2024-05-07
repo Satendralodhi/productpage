@@ -8,7 +8,7 @@ const Shipping_Model = require("../model/ShipingModel");
 const video_Model = require("../model/VideoModel");
 const Image_Model = require("../model/ImageModel");
 const userWishlistModel = require("../model/userWishlistModel");
-const Product_Model = require("../model/Productmodel");
+
 const { Model, Sequelize } = require("sequelize");
 const connection = require("../database/config");
 const createError = require("http-errors");
@@ -92,8 +92,7 @@ module.exports = {
       let result;
 
       if (req.body.price != null) {
-        const product = await Product_Model.create({
-          productId: req.body.productId,
+        const product = await Product.create({
           name: req.body.name,
           description: req.body.description,
           price: req.body.price,
