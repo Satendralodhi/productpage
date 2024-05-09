@@ -12,6 +12,7 @@ const path = require("path");
 const { Sequelize } = require("sequelize");
 const connection = require("../database/config");
 const createError = require("http-errors");
+const { error } = require("console");
 
 module.exports = {
   createuserWishlistModel: async (req, res, next) => {
@@ -90,7 +91,6 @@ module.exports = {
   CreateProduct: async (req, res, next) => {
     try {
       let result;
-      console.log(req.files["images"]);
 
       if (req.body.price != null) {
         const product = await Product.create({
@@ -188,27 +188,34 @@ module.exports = {
   uploadimage_video: async (req, res, next) => {
     try {
       const ProductTableProductId = req.params.productId;
-      console.log(req.files["images"]);
-      const imagepath = req.files["images"].path;
-      console.log(imagepath);
-      let result;
-      if (req.files["images"]) {
-        const imageT = await Image_Model.create({
-          ProductTableProductId: ProductTableProductId,
-          productId: ProductTableProductId,
-          images: req.files["images"],
-        });
 
-        result = "image is store";
+      let result;
+
+      if (req.files["images"] || req.files["videos"]) {
+        if (req.files["images"]) {
+          const imageT = await Image_Model.create({
+            ProductTableProductId: ProductTableProductId,
+            productId: ProductTableProductId,
+            images: req.files["images"],
+          });
+
+          result = "image is store";
+        }
+        if (req.files["videos"]) {
+          const videoT = await video_Model.create({
+            ProductTableProductId: ProductTableProductId,
+            productId: ProductTableProductId,
+            videos: req.files["videos"],
+          });
+
+          if (result) {
+            result += " video is store";
+          } else {
+            result = " video is store";
+          }
+        }
       }
-      if (req.files["videos"]) {
-        const videoT = await video_Model.create({
-          ProductTableProductId: ProductTableProductId,
-          productId: ProductTableProductId,
-          videos: req.files["videos"],
-        });
-        result += " video is store";
-      }
+
       res.send(result);
     } catch (error) {
       console.log(error.message);
