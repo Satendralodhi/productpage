@@ -13,7 +13,7 @@ const video_Model = connection.define(
       },
     },
     videos: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
   },
   { timestamps: false, freezeTableName: true }

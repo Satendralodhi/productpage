@@ -12,8 +12,9 @@ const Image_Model = connection.define(
         key: "ProductId",
       },
     },
+
     images: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
   },
   { timestamps: false, freezeTableName: true }

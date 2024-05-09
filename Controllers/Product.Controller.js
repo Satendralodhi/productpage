@@ -8,7 +8,7 @@ const Shipping_Model = require("../model/ShipingModel");
 const video_Model = require("../model/VideoModel");
 const Image_Model = require("../model/ImageModel");
 const userWishlistModel = require("../model/userWishlistModel");
-
+const path = require("path");
 const { Sequelize } = require("sequelize");
 const connection = require("../database/config");
 const createError = require("http-errors");
@@ -90,6 +90,7 @@ module.exports = {
   CreateProduct: async (req, res, next) => {
     try {
       let result;
+      console.log(req.files["images"]);
 
       if (req.body.price != null) {
         const product = await Product.create({
@@ -135,16 +136,7 @@ module.exports = {
           type: req.body.type,
           value: req.body.value,
         });
-        const imageT = await Image_Model.create({
-          ProductTableProductId: ProductTableProductId,
-          productId: ProductTableProductId,
-          images: req.body.images,
-        });
-        const videoT = await video_Model.create({
-          ProductTableProductId: ProductTableProductId,
-          productId: ProductTableProductId,
-          videos: req.body.videos,
-        });
+
         const shippingT = await Shipping_Model.create({
           ProductTableProductId: ProductTableProductId,
           productId: ProductTableProductId,
@@ -172,26 +164,6 @@ module.exports = {
         result = ratingT;
       } else if (
         req.body.ProductTableProductId != null &&
-        req.body.images != null
-      ) {
-        const imageT = await Image_Model.create({
-          productId: req.body.ProductTableProductId,
-          ProductTableProductId: req.body.ProductTableProductId,
-          images: req.body.images,
-        });
-        result = imageT;
-      } else if (
-        req.body.ProductTableProductId != null &&
-        req.body.videos != null
-      ) {
-        const videoT = await video_Model.create({
-          productId: req.body.ProductTableProductId,
-          ProductTableProductId: req.body.ProductTableProductId,
-          videos: req.body.videos,
-        });
-        result = videoT;
-      } else if (
-        req.body.ProductTableProductId != null &&
         (req.body.type || req.body.value)
       ) {
         console.log("discount");
@@ -202,6 +174,40 @@ module.exports = {
           value: req.body.value,
         });
         result = DiscountT;
+      }
+      res.send(result);
+    } catch (error) {
+      console.log(error.message);
+      if (error.name === "ValidationError") {
+        next(createError(422, error.message));
+        return;
+      }
+      next(error);
+    }
+  },
+  uploadimage_video: async (req, res, next) => {
+    try {
+      const ProductTableProductId = req.params.productId;
+      console.log(req.files["images"]);
+      const imagepath = req.files["images"].path;
+      console.log(imagepath);
+      let result;
+      if (req.files["images"]) {
+        const imageT = await Image_Model.create({
+          ProductTableProductId: ProductTableProductId,
+          productId: ProductTableProductId,
+          images: req.files["images"],
+        });
+
+        result = "image is store";
+      }
+      if (req.files["videos"]) {
+        const videoT = await video_Model.create({
+          ProductTableProductId: ProductTableProductId,
+          productId: ProductTableProductId,
+          videos: req.files["videos"],
+        });
+        result += " video is store";
       }
       res.send(result);
     } catch (error) {
