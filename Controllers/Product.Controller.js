@@ -42,8 +42,8 @@ module.exports = {
           Dimension_Model,
           Ratings_Model,
           Discount_Model,
-          video_Model,
           Image_Model,
+          video_Model,
         ],
       });
 

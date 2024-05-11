@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const CreateProductverify = require("../middleware/createproduct");
 const upload = require("../middleware/storage.middleware");
 const image_video_upload = upload.fields([
   { name: "images", maxCount: 4 },
@@ -16,7 +17,7 @@ router.post(
 router.get("/:id", ProductController.getProductsbyId);
 router.post("/:productId/wishlist", ProductController.createuserWishlistModel);
 router.post("/:productId/rating", ProductController.CreateRatings);
-router.post("/", ProductController.CreateProduct);
+router.post("", CreateProductverify, ProductController.CreateProduct);
 router.get("/category/:category", ProductController.findproductbycategory);
 router.get("/color/:color", ProductController.findproductbycolor);
 router.get("/size/:size", ProductController.findproductbysize);
